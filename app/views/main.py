@@ -1,8 +1,12 @@
-from flask import render_template, Blueprint, request, redirect, url_for, flash
+from io import BytesIO
+import datetime
+
+from flask import render_template, Blueprint, request, flash, Response
 
 from app import models as m
 from app import forms as f
 from app import db
+from app.commands import get_csv_bites
 from app.logger import log
 
 
@@ -27,8 +31,14 @@ def index():
         log(log.INFO, "Form submitted. Study: [%s]", study.study)
         if study:
             log(log.INFO, "Study found.")
-            # TODO supply csv
-            return render_template("index.html", form=form, all_studies=all_studies)
+            csv_bites: BytesIO = get_csv_bites()
+            return Response(csv_bites.getvalue(),
+                            mimetype='application/zip',
+                            headers={
+                                'Content-Disposition':
+                                f'attachment;filename=study-{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.zip'
+                            })
+            # return render_template("index.html", form=form, all_studies=all_studies)
         flash("Wrong study name.", "danger")
 
     elif form.is_submitted():
