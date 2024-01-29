@@ -12,7 +12,7 @@ main_blueprint = Blueprint("main", __name__)
 @main_blueprint.route("/", methods=["GET", "POST"])
 def index():
     form = f.MainForm(request.form)
-    all_studies = db.session.scalars(m.Study.select()).all()
+    all_studies = db.session.scalars(m.Study.select())
 
     if form.validate_on_submit():
 
@@ -21,9 +21,11 @@ def index():
             flash("Form study error: study value is not digit", "danger")
             return render_template("index.html", form=form, all_studies=all_studies)
 
-        query = db.session.scalar(m.Study.select().where(m.Study.id == int(form.study.data)))
-        log(log.INFO, "Form submitted. Study: [%s]", query.study)
-        if query:
+        study: m.Study = db.session.scalar(m.Study.select().where(m.Study.id == int(form.study.data)))
+        stdy_popns = [i.population for i in study.populations]
+
+        log(log.INFO, "Form submitted. Study: [%s]", study.study)
+        if study:
             log(log.INFO, "Study found.")
             # TODO supply csv
             return render_template("index.html", form=form, all_studies=all_studies)

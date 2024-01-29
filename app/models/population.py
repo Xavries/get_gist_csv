@@ -20,6 +20,10 @@ class Population(db.Model, ModelMixin):
         default=False
     )  # TODO: DEFAULT FALSE???
 
+    # Relationships
+    subpopulations: orm.Mapped[list["Subpopulation"]] = orm.relationship()
+    results: orm.Mapped[list["Result"]] = orm.relationship()
+
     def __repr__(self):
         return f"<{self.id}: {self.population},{self.study.name}>"
 
