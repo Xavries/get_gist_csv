@@ -3,6 +3,9 @@ from functools import lru_cache
 import tomllib
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+DATABASE_PATH = os.path.expanduser(
+    f'~/Documents/{os.environ.get("DATABASE_FILENAME", "database-dev.grist")}'
+)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 APP_ENV = os.environ.get("APP_ENV", "development")
 DB_TABLES_LIST = [
@@ -31,7 +34,7 @@ class BaseConfig(BaseSettings):
     IS_API: bool = False
 
     ENV: str = "base"
-    APP_NAME: str = "Simple Flask App"
+    APP_NAME: str = "Flask App"
     SECRET_KEY: str
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
     WTF_CSRF_ENABLED: bool = False

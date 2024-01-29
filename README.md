@@ -24,10 +24,6 @@ to create an docker container
 
    - go to "Run and Debug" tab in VSCode and select "Python:Flask" from dropdown menu
 
-   To run FastAPI app:
-
-   - go to "Run and Debug" tab in VSCode and select "API" from dropdown menu
-
    After selection, press `"Run and Debug"` button or `F5` key on keyboard
 
 5. Create db with command
