@@ -33,7 +33,7 @@ def get_csv_bites(top_dir=f"study-{datetime.datetime.now().strftime('%Y-%m-%d-%H
             writer.writeheader()
             for line in results:
                 writer.writerow(line)
-            zf.writestr(f'file{table_name}.csv', csv_io.getvalue())
+            zf.writestr(f'{table_name}.csv', csv_io.getvalue())
 
     # Go back to the start of the BytesIO object
     csv_bites.seek(0)

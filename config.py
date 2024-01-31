@@ -3,9 +3,8 @@ from functools import lru_cache
 import tomllib
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-DATABASE_PATH = os.path.expanduser(
-    f'~/Documents/{os.environ.get("DATABASE_FILENAME", "database-dev.grist")}'
-)
+DATABASE_FILENAME = os.environ.get("DATABASE_FILENAME", "database-dev.grist")
+DATABASE_PATH = os.path.expanduser(f'~/Documents/{DATABASE_FILENAME}')
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 APP_ENV = os.environ.get("APP_ENV", "development")
 DB_TABLES_LIST = [
@@ -77,7 +76,7 @@ class DevelopmentConfig(BaseConfig):
     """Development configuration."""
 
     DEBUG: bool = True
-    ALCHEMICAL_DATABASE_URL: str = "sqlite:///" + os.path.join(BASE_DIR, "database-dev.sqlite3")
+    ALCHEMICAL_DATABASE_URL: str = "sqlite:///" + DATABASE_PATH
 
 
 class TestingConfig(BaseConfig):
@@ -92,7 +91,7 @@ class ProductionConfig(BaseConfig):
     """Production configuration."""
 
     ALCHEMICAL_DATABASE_URL: str = os.environ.get(
-        "DATABASE_URL", "sqlite:///" + os.path.join(BASE_DIR, "database.sqlite3")
+        "DATABASE_URL", "sqlite:///" + DATABASE_PATH
     )
     WTF_CSRF_ENABLED: bool = True
 
