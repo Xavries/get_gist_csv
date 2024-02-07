@@ -36,7 +36,7 @@ def index():
                             mimetype='application/zip',
                             headers={
                                 'Content-Disposition':
-                                f'attachment;filename=study-{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.zip'
+                                f'attachment;filename=study-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")}.zip'
                             })
             # return render_template("index.html", form=form, all_studies=all_studies)
         flash("Wrong study name.", "danger")
