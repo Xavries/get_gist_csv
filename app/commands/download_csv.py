@@ -5,13 +5,22 @@ import time
 import zipfile
 import sqlite3
 import csv
-from config import DB_TABLES_LIST, DATABASE_PATH
+from config import DB_TABLES_LIST
 
 
-def get_csv_bites(top_dir=f"study-{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"):
-    conn = sqlite3.connect(DATABASE_PATH)
+def get_csv_bites(db_file_path):
+    root, ext = os.path.splitext(db_file_path)
+    if ext != ".sqlite3":
+        # Define the current file path and the new file path
+        current_file_path = os.path.expanduser(db_file_path)
+        new_file_path = os.path.expanduser(root + ".sqlite3")
+
+        # Rename the file
+        os.rename(current_file_path, new_file_path)
+        db_file_path = new_file_path
+
+    conn = sqlite3.connect(db_file_path)
     c = conn.cursor()
-    top_dir_path = os.path.expanduser(f'~/Documents/{top_dir}')
     csv_bites = BytesIO()
 
     with zipfile.ZipFile(csv_bites, 'w') as zf:
@@ -37,5 +46,8 @@ def get_csv_bites(top_dir=f"study-{datetime.datetime.now().strftime('%Y-%m-%d-%H
 
     # Go back to the start of the BytesIO object
     csv_bites.seek(0)
+
+    # Rename it back to the original file name
+    os.rename(new_file_path, current_file_path)
 
     return csv_bites
